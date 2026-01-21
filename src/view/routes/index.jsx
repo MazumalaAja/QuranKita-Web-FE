@@ -1,7 +1,7 @@
 // ===== Imports =====
 import { createBrowserRouter } from "react-router-dom";
 import LayoutPage from "../components/layouts";
-import { HomePage, QuranPage, SholatPage } from "../pages";
+import { HomePage, KontakPage, QuranPage, SholatPage } from "../pages";
 
 // ===== Code =====
 const router = createBrowserRouter([
@@ -13,6 +13,10 @@ const router = createBrowserRouter([
                { path: "al-quran", element: <QuranPage /> },
                { path: "waktu-sholat", element: <SholatPage /> }
           ]
+     },
+     {
+          path: "/kontak",
+          element: <KontakPage />
      }
 ])
 

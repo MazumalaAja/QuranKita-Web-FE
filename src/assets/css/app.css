@@ -1,2 +1,18 @@
-/* ===== Imports ===== */
-@import "tailwindcss";
+/* ===== Code ===== */
+*::-webkit-scrollbar {
+     display: none;
+}
+
+:root {
+     interpolate-size: allow-keywords;
+}
+
+#layout {
+     background:
+          linear-gradient(to top, rgb(3, 7, 18),
+               rgba(0, 0, 0, 0)),
+          url("../images/jpg/02.jpg");
+     background-size: cover;
+     background-repeat: no-repeat;
+     background-position: center;
+}
