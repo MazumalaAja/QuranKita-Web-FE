@@ -1,16 +1,20 @@
 // ===== Imports =====
 import { useState } from "react"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import "../../../assets/css/navbar.css"
 
 // ===== Code =====
 export default function Navbar({ data }) {
+     // ===== States =====
      const [open, setOpen] = useState(false);
+
+     // ====== Navigation ======
+     const navigate = useNavigate();
      return (
           <header className={`${open ? `h-max` : `h-14`} duration-300 navbar overflow-auto`}>
                {/* ===== Logo ===== */}
                <div className="text-xl flex justify-between items-center font-medium text-gray-300 ">
-                    <div className="flex gap-2 items-center">
+                    <div onClick={() => navigate("/")} className="flex gap-2 items-center cursor-pointer">
                          <i className="bi bi-journal"></i>
                          <h1>QuranKita.</h1>
                     </div>

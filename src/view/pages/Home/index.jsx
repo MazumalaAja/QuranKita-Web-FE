@@ -1,7 +1,11 @@
+import { Navigate, useNavigate } from "react-router-dom"
 import Navbar from "../../components/navigations"
 
 // ===== Code =====
 export default function HomePage() {
+     // ===== Navigation =====
+     const navigate = useNavigate();
+
      // ===== Data For Card =====
      const data = [
           { icon: `bi bi-book`, title: `Baca Al-Quran`, text: `Teks Arab, transliterasi, dan terjemahan bahasa Indonesia` },
@@ -36,11 +40,11 @@ export default function HomePage() {
 
                     {/* ===== CTA ===== */}
                     <div className="flex flex-col w-full items-center justify-center sm:flex-row gap-4">
-                         <button className="text-gray-200 w-full md:w-max duration-200 active:scale-95 bg-gray-600/10 backdrop-blur-md border-2 border-gray-200/10 hover:text-gray-800 cursor-pointer text-sm sm:text-md md:text-xl flex justify-center items-center gap-2 hover:bg-gray-100 px-7 py-2 rounded-full">
+                         <button onClick={() => navigate("al-quran")} className="text-gray-200 w-full md:w-max duration-200 active:scale-95 bg-gray-600/10 backdrop-blur-md border-2 border-gray-200/10 hover:text-gray-800 cursor-pointer text-sm sm:text-md md:text-xl flex justify-center items-center gap-2 hover:bg-gray-100 px-7 py-2 rounded-full">
                               <i className="bi bi-book text-xl md:text-2xl"></i>
                               <span>Ayo Mulai Baca!</span>
                          </button>
-                         <button className="text-gray-200 w-full md:w-max duration-200 active:scale-95 bg-gray-600/10 backdrop-blur-md border-2 border-gray-200/10 hover:text-gray-800 cursor-pointer text-sm sm:text-md md:text-xl flex justify-center items-center gap-2 hover:bg-gray-100 px-7 py-2 rounded-full">
+                         <button onClick={() => navigate("waktu-sholat")} className="text-gray-200 w-full md:w-max duration-200 active:scale-95 bg-gray-600/10 backdrop-blur-md border-2 border-gray-200/10 hover:text-gray-800 cursor-pointer text-sm sm:text-md md:text-xl flex justify-center items-center gap-2 hover:bg-gray-100 px-7 py-2 rounded-full">
                               <i className="bi bi-clock text-xl md:text-2xl"></i>
                               <span>Lihat Waktu Sholat!</span>
                          </button>

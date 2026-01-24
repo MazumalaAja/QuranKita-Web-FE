@@ -25,7 +25,7 @@ async function post(path, body) {
 
 // ===== GET DETAIL =====
 async function getDetail(path, id) {
-     const response = await fetch(baseURL + path + id, {
+     const response = await fetch(`${baseURL}/${path}/${id}`, {
           method: "GET",
           headers: {
                "Content-Type": "application/json"

@@ -1,7 +1,11 @@
 // ===== Imports =====
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate, useParams } from "react-router-dom";
 import LayoutPage from "../components/layouts";
-import { HomePage, KontakPage, QuranPage, SholatPage } from "../pages";
+import { HomePage, KontakPage, SholatPage, DetailPage } from "../pages";
+import { lazy, Suspense } from "react";
+import { getDetailSurah, getSurah } from "../../services/cache";
+import Loading from "../components/loader";
+const QuranPage = lazy(() => import("../pages/Quran/index"));
 
 // ===== Code =====
 const router = createBrowserRouter([
@@ -15,7 +19,20 @@ const router = createBrowserRouter([
                },
                {
                     path: "al-quran",
-                    element: <QuranPage />
+                    loader: () => getSurah("surat"),
+                    element: (
+                         <Suspense fallback={<Loading />}>
+                              <QuranPage />
+                         </Suspense>
+                    ),
+                    children: [
+                         { index: true, element: <Navigate to={"1"} /> },
+                         {
+                              path: ":id",
+                              loader: ({ params }) => getDetailSurah("surat", params.id),
+                              element: <DetailPage />
+                         }
+                    ]
                },
                {
                     path: "waktu-sholat",
