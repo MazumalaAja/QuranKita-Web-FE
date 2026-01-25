@@ -38,16 +38,13 @@ async function getDetailSurah(path, id) {
           const cacheSurah = JSON.parse(localStorage.getItem(`surah-${id}`));
           if (cacheSurah) {
                if (cacheSurah.expireAt > Date.now()) {
-                    console.log("Data cache masih ada");
-                    console.log(cacheSurah.data.data);
                     return cacheSurah.data.data;
                } else {
                     console.log("Data cache sudah expire dan melakukan fetch baru");
                     const response = await getDetail(path, id);
-                    console.log(response.data.data);
                     localStorage.setItem(`surah-${id}`, JSON.stringify({
                          data: response,
-                         expireAt: Date.now() + (1000 * 60 * 2)
+                         expireAt: Date.now() + (1000 * 60 * 30)
                     }));
                     return response.data;
                }
@@ -57,7 +54,7 @@ async function getDetailSurah(path, id) {
                console.log(response.data.data);
                localStorage.setItem(`surah-${id}`, JSON.stringify({
                     data: response,
-                    expireAt: Date.now() + (1000 * 60 * 2)
+                    expireAt: Date.now() + (1000 * 60 * 30)
                }));
                return response.data;
           }
@@ -67,5 +64,34 @@ async function getDetailSurah(path, id) {
      }
 }
 
+// ===== getProvinsi =====
+async function getProvinsi(path) {
+     try {
+          const cacheProvinsi = JSON.parse(localStorage.getItem("provinsi"));
+          if (cacheProvinsi) {
+               if (cacheProvinsi.expireAt > Date.now()) {
+                    return cacheProvinsi.data;
+               } else {
+                    const response = await get(path);
+                    localStorage.setItem("provinsi", {
+                         data: response,
+                         expireAt: Date.now() + (1000 * 60 * 30)
+                    });
+                    return response.data;
+               }
+          } else {
+               const response = await get(path);
+               localStorage.setItem("provinsi", JSON.stringify({
+                    data: response,
+                    expireAt: Date.now() + (1000 * 60 * 30)
+               }));
+               return response.data;
+          }
+     } catch (err) {
+          localStorage.removeItem("provinsi")
+          throw new Error(err);
+     }
+}
 
-export { getSurah, getDetailSurah }
+
+export { getSurah, getDetailSurah, getProvinsi }

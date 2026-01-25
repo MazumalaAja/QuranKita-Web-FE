@@ -3,7 +3,7 @@ import { createBrowserRouter, Navigate, useParams } from "react-router-dom";
 import LayoutPage from "../components/layouts";
 import { HomePage, KontakPage, SholatPage, DetailPage } from "../pages";
 import { lazy, Suspense } from "react";
-import { getDetailSurah, getSurah } from "../../services/cache";
+import { getDetailSurah, getProvinsi, getSurah } from "../../services/cache";
 import Loading from "../components/loader";
 const QuranPage = lazy(() => import("../pages/Quran/index"));
 
@@ -36,6 +36,7 @@ const router = createBrowserRouter([
                },
                {
                     path: "waktu-sholat",
+                    loader: () => getProvinsi(`shalat/provinsi`),
                     element: <SholatPage />
                }
           ]
