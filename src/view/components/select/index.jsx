@@ -1,33 +1,43 @@
+// ===== Imports =====
 import { useState } from "react"
 
 // ===== Code =====
-export default function Selects({ data, text = "Choose your own...", icon, label = "Title", onChange, onClick, value }) {
+export default function Selects({ title, data, text, onCLick, value = "", onChange, isReady, icon }) {
+     // ===== States =====
      const [open, setOpen] = useState(false)
      return (
           <>
-               <div className=" bg-gray-950/30 backdrop-blur-md h-max w-max p-2 rounded-md  flex gap-2 flex-col">
-                    {/* ===== Titile ===== */}
-                    <div className="bg-indigo-500/10 flex gap-2 justify-center items-center text-indigo-300 border-indigo-300/20 border text-center p-0.5 rounded-full">
-                         {icon && <i className={`bi bi-${icon} text-xl`}></i>}
-                         <h2>{label}</h2>
+               {/* ===== Container ===== */}
+               <div className={`bg-gray-900/30 backdrop-blur-md ${isReady ? `opacity-100` : `opacity-50`} h-max border-gray-400/10 border-2 rounded-md overflow-auto`}>
+                    {/* ===== Title ===== */}
+                    <div className="bg-gray-400/10 text-gray-300 px-2 flex justify-center items-center gap-2 p-1 text-center">
+                         {icon && <i className={`bi bi-${icon}`}></i>}
+                         <h2>{title ?? "Titel"}</h2>
                     </div>
 
-                    {/* ===== Input Text (Searh) ===== */}
-                    <div className="border focus-within:bg-gray-600/30 border-gray-400/20 p-2 rounded-md flex gap-2 items-center">
-                         <input value={value} onChange={(e) => {
-                              setOpen(true)
-                              onChange(e.target.value)
-                         }} className="text-gray-300 flex-1 px-2 text-sm focus:outline-0" placeholder={text} type="text" />
-                         <i onClick={() => setOpen(!open)} className={`bi bi-chevron-left ${open ? `-rotate-90` : `rotate-0`} duration-150 text-indigo-300 border border-indigo-300/20 cursor-pointer bg-indigo-600/20 hover:bg-indigo-600/30 px-1 rounded-full`}></i>
+                    {/* ===== Input ===== */}
+                    <div className={`flex  items-center gap-2 p-2`}>
+                         <div className={`border-2 border-gray-400/10 rounded-md flex overflow-hidden`}>
+                              <i className="bi bi-search p-1 px-2 text-gray-300 bg-gray-400/10"></i>
+                              <input {...(!isReady ? { readOnly: true } : null)} onChange={(e) => {
+                                   setOpen(true)
+                                   onChange(e.target.value)
+                              }} defaultValue={value} placeholder={text ?? "Choose your own..."} type="text" className={`focus:outline-0 ${isReady ? `` : `cursor-not-allowed`} placeholder:text-sm text-gray-300 px-2`} />
+                         </div>
+
+                         {/* ===== Chevron ===== */}
+                         <div onClick={() => setOpen(!open)} className={`bg-gray-400/10 text-gray-300 hover:bg-gray-400/20 px-2 p-1 rounded-full ${isReady && open ? `-rotate-90` : `rotate-0`} duration-200 overflow-hidden border-2 border-gray-300/10 active:scale-95 ${isReady ? `cursor-pointer` : `cursor-not-allowed`}`}>
+                              <i className={`bi bi-chevron-left ${isReady && open ? `` : ``}`}></i>
+                         </div>
                     </div>
 
-                    {/* ===== Option ===== */}
-                    <ul className={`bg-indigo-600/10 duration-150 overflow-scroll rounded-md ${open ? `h-52` : `h-0`}`}>
+                    {/* ===== List ===== */}
+                    <ul className={`text-indigo-300 duration-200 ${isReady && open ? `max-h-56` : `max-h-0`} overflow-auto`}>
                          {data && data.map((v, i) => (
                               <li onClick={() => {
-                                   onClick(v)
+                                   onCLick(v)
                                    setOpen(false)
-                              }} className="p-2 cursor-pointer text-indigo-300 hover:text-indigo-100 hover:bg-indigo-400/50" key={i}>{v}</li>
+                              }} className="hover:bg-indigo-500 px-2 py-1 cursor-pointer hover:text-indigo-100" key={i}>{v}</li>
                          ))}
                     </ul>
                </div>

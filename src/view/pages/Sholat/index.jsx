@@ -1,61 +1,81 @@
 // ===== Imports =====
 import { useEffect, useState } from "react";
 import Navbar from "../../components/navigations";
-import Selects from "../../components/select";
 import { useLoaderData } from "react-router-dom";
 import { post } from "../../../services/api";
+import Selects from "../../components/select"
 
 // ===== Navigation data =====
 const navigation = [
      { label: "Al-Quran", icon: "journal", to: "/al-quran" },
      { label: "Waktu Sholat", icon: "time", to: "/waktu-sholat" },
-]
+];
 
 // ===== Code =====
 export default function SholatPage() {
-     // ===== States =====
-     const dataProvinsi = useLoaderData() ?? [];
-     const [provinsi, setProvinsi] = useState(dataProvinsi.data)
-     const [kabKota, setKabKota] = useState([])
-     const [pick, setPick] = useState({
-          kabKota: "",
-          provinsi: "",
-     });
+     // ===== Loader data =====
+     const loaderDataProvinsi = useLoaderData();
 
-     // ===== Get API KabKota =====
-     async function getApiKabKota() {
-          try {
-               const response = await post(`shalat/kabkota`, { provinsi: pick.provinsi });
-               setKabKota(response.data)
-          } catch (err) {
-               throw new Error(err);
+     // ===== Master Data =====
+     const [masterProvinsi, setMasterProvinsi] = useState(loaderDataProvinsi.data);
+     const [masterKabkota, setMasterKabkota] = useState([]);
+
+     // ===== Filter Data =====
+     const [listProvinsi, setListProvinsi] = useState(masterProvinsi)
+     const [listKabkota, setListKabkota] = useState(masterKabkota)
+
+     // ===== user Pick =====
+     const [pick, setPick] = useState({
+          provinsi: "",
+          kabkota: ""
+     })
+
+     // ===== HandleClick =====
+     function HandleClickProvinsi(value) {
+          setPick(prev => ({ ...prev, provinsi: value }));
+     }
+
+     function HandleClickKabkota(value) {
+          setPick(prev => ({ ...prev, kabkota: value }));
+     }
+
+     // ===== HandleChange =====
+     function HandleChange(value) {
+          if (value && value.trim()) {
+               const filtered = masterProvinsi.filter(v => v.toLowerCase().includes(value.toLowerCase()));
+               setListProvinsi(filtered.length > 0 ? filtered : ["Tidak Tersedia"]);
+          } else {
+               setListProvinsi(masterProvinsi);
           }
      }
 
-     // ===== Handle
-     function handlePickProvinsi(e) {
-          setPick(prev => ({ ...prev, provinsi: e }))
-     }
-
-     function handleKabKota(e) {
-          setPick(prev => ({ ...prev, kabKota: e }))
-     }
-
-     function handleChangeProvinsi(value) {
-          setPick(prev => ({ ...prev, provinsi: value }));
-          if (value.trim()) {
-               const result = provinsi.filter(v => v.toLowerCase().includes(value.toLowerCase()));
-               setProvinsi(result ? result : ["Tidak tersedia"]);
+     function HandleChange2(value) {
+          if (value && value.trim()) {
+               const filtered = masterKabkota.filter(v => v.toLowerCase().includes(value.toLowerCase()));
+               setListKabkota(filtered.length > 0 ? filtered : ["Tidak Tersedia"]);
           } else {
-               setProvinsi(dataProvinsi.data)
+               setListKabkota(masterKabkota);
+          }
+     }
+
+     // ===== GetKabKota API =====
+     async function getKabKota() {
+          try {
+               const response = await post("shalat/kabkota", { provinsi: pick.provinsi });
+               console.log(response);
+               setMasterKabkota(response.data);
+               setListKabkota(response.data)
+          } catch (err) {
+               console.error(err);
           }
      }
 
      useEffect(() => {
-          if (pick.provinsi.trim()) {
-               getApiKabKota()
+          if (pick.provinsi != "") {
+               getKabKota()
           }
      }, [pick.provinsi])
+
      return (
           <>
                {/* ===== Navbar ===== */}
@@ -63,13 +83,12 @@ export default function SholatPage() {
 
                {/* ===== Main ===== */}
                <main className="min-h-screen py-20 p-3 bg-gray-950/30">
-                    {/* ===== Select ===== */}
-                    <div className="flex gap-3">
-                         {/* ===== Provinsi ====== */}
-                         <Selects onChange={handleChangeProvinsi} onClick={handlePickProvinsi} value={pick.provinsi} data={provinsi} label={`Provinsi`} icon={`geo-alt`} />
+                    <div className="flex gap-2">
+                         {/* ===== Provinsi ===== */}
+                         <Selects icon={`map`} isReady={listProvinsi.length > 0} value={pick.provinsi} onChange={HandleChange} onCLick={HandleClickProvinsi} data={listProvinsi} title={`Provinsi`} />
 
-                         {/* ===== Kabupaten ====== */}
-                         <Selects onChange={() => console.log("anjay")} onClick={handleKabKota} value={pick.kabKota} data={kabKota} label={`Kabupaten & Kota`} icon={`building`} />
+                         {/* ===== KabKota ===== */}
+                         <Selects icon={`map`} title={`Kabupaten & Kota`} isReady={listKabkota.length > 0} value={pick.kabkota} data={listKabkota} onCLick={HandleClickKabkota} onChange={HandleClickKabkota} />
                     </div>
                </main>
 
@@ -78,5 +97,5 @@ export default function SholatPage() {
                     <span>© {new Date().getFullYear()} Mazumala. Semua hak dilindungi.</span>
                </footer>
           </>
-     )
+     );
 }
