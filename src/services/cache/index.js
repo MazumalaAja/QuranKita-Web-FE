@@ -3,6 +3,7 @@ import { get, getDetail } from "../api";
 
 // ===== getSurah =====
 async function getSurah(path) {
+     if (!navigator.onLine) throw new Error("Anda sedang Offline")
      try {
           // await new Promise(r => setTimeout(r, 800)); // DEBUG
           const cacheSurah = JSON.parse(localStorage.getItem("surah"));
@@ -33,6 +34,7 @@ async function getSurah(path) {
 
 // ===== getDetailSurah =====
 async function getDetailSurah(path, id) {
+     if (!navigator.onLine) throw new Error("Anda sedang Offline")
      try {
           // await new Promise(r => setTimeout(r, 800)); // DEBUG
           const cacheSurah = JSON.parse(localStorage.getItem(`surah-${id}`));
@@ -66,6 +68,7 @@ async function getDetailSurah(path, id) {
 
 // ===== getProvinsi =====
 async function getProvinsi(path) {
+     if (!navigator.onLine) throw new Error("Anda sedang Offline")
      try {
           const cacheProvinsi = JSON.parse(localStorage.getItem("provinsi"));
           if (cacheProvinsi) {
@@ -73,10 +76,10 @@ async function getProvinsi(path) {
                     return cacheProvinsi.data;
                } else {
                     const response = await get(path);
-                    localStorage.setItem("provinsi", {
+                    localStorage.setItem("provinsi", JSON.stringify({
                          data: response,
                          expireAt: Date.now() + (1000 * 60 * 30)
-                    });
+                    }));
                     return response.data;
                }
           } else {

@@ -2,13 +2,13 @@
 import { useState } from "react"
 
 // ===== Code =====
-export default function Selects({ title, data, text, onCLick, value = "", onChange, isReady, icon }) {
+export default function Selects({ title, type, data, text, onCLick, value = "", onChange, isReady, icon, defaultValuex }) {
      // ===== States =====
      const [open, setOpen] = useState(false)
      return (
           <>
                {/* ===== Container ===== */}
-               <div className={`bg-gray-900/30 backdrop-blur-md ${isReady ? `opacity-100` : `opacity-50`} h-max border-gray-400/10 border-2 rounded-md overflow-auto`}>
+               <div className={`bg-gray-900/30 z-999 relative backdrop-blur-md ${isReady ? `opacity-100` : `opacity-50`} h-max border-gray-400/10 border-2 rounded-md`}>
                     {/* ===== Title ===== */}
                     <div className="bg-gray-400/10 text-gray-300 px-2 flex justify-center items-center gap-2 p-1 text-center">
                          {icon && <i className={`bi bi-${icon}`}></i>}
@@ -22,7 +22,7 @@ export default function Selects({ title, data, text, onCLick, value = "", onChan
                               <input {...(!isReady ? { readOnly: true } : null)} onChange={(e) => {
                                    setOpen(true)
                                    onChange(e.target.value)
-                              }} defaultValue={value} placeholder={text ?? "Choose your own..."} type="text" className={`focus:outline-0 ${isReady ? `` : `cursor-not-allowed`} placeholder:text-sm text-gray-300 px-2`} />
+                              }} {...(defaultValuex ? { defaultValue: value } : { value: value })} placeholder={text ?? "Choose your own..."} type={type ?? "text"} className={`focus:outline-0 ${isReady ? `` : `cursor-not-allowed`} placeholder:text-sm text-gray-300 px-2`} />
                          </div>
 
                          {/* ===== Chevron ===== */}
@@ -32,12 +32,12 @@ export default function Selects({ title, data, text, onCLick, value = "", onChan
                     </div>
 
                     {/* ===== List ===== */}
-                    <ul className={`text-indigo-300 duration-200 ${isReady && open ? `max-h-56` : `max-h-0`} overflow-auto`}>
+                    <ul className={`text-indigo-300 bg-gray-900 backdrop-blur-md absolute top-full mt-3 rounded-md left-0 right-0  duration-200 ${isReady && open ? `max-h-56 border` : `max-h-0`} overflow-auto border-gray-400/10 `}>
                          {data && data.map((v, i) => (
                               <li onClick={() => {
-                                   onCLick(v)
+                                   onCLick({ value: v, index: i })
                                    setOpen(false)
-                              }} className="hover:bg-indigo-500 px-2 py-1 cursor-pointer hover:text-indigo-100" key={i}>{v}</li>
+                              }} className={`hover:bg-indigo-500 px-2 py-1 cursor-pointer hover:text-indigo-100`} key={i}>{v}</li>
                          ))}
                     </ul>
                </div>
