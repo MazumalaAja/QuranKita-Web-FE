@@ -1,7 +1,7 @@
 // ===== Imports =====
 import { createBrowserRouter, Navigate, useParams } from "react-router-dom";
 import LayoutPage from "../components/layouts";
-import { HomePage, KontakPage, SholatPage, DetailPage } from "../pages";
+import { HomePage, KontakPage, SholatPage, DetailPage, ErrorPage } from "../pages";
 import { lazy, Suspense } from "react";
 import { getDetailSurah, getProvinsi, getSurah } from "../../services/cache";
 import Loading from "../components/loader";
@@ -12,6 +12,7 @@ const router = createBrowserRouter([
      {
           path: "/",
           element: <LayoutPage />,
+          errorElement: <ErrorPage />,
           children: [
                {
                     index: true,

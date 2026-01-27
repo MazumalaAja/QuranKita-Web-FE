@@ -129,6 +129,13 @@ export default function SholatPage() {
                getShalat()
           }
      }, [pick.kabkota, pick.bulan]);
+
+     useEffect(() => {
+          if (loaderDataProvinsi?.data) {
+               setMasterProvinsi(loaderDataProvinsi.data);
+               setListProvinsi(loaderDataProvinsi.data);
+          }
+     }, [loaderDataProvinsi])
      return (
           <>
 
