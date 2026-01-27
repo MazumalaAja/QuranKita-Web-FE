@@ -20,8 +20,8 @@ export default function SholatPage() {
      const [masterShlat, setMasterShalat] = useState([]);
 
      // ===== Filter Data =====
-     const [listProvinsi, setListProvinsi] = useState(masterProvinsi || [])
-     const [listKabkota, setListKabkota] = useState(masterKabkota || [])
+     const [listProvinsi, setListProvinsi] = useState([])
+     const [listKabkota, setListKabkota] = useState([])
 
      // ===== Bulan =====
      const bulan = [];
@@ -79,6 +79,7 @@ export default function SholatPage() {
                setOpen(true)
                const response = await getProvinsi("shalat/provinsi");
                setMasterProvinsi(response.data);
+               setListProvinsi(response.data);
           } catch (err) {
                console.error(err);
           } finally {
